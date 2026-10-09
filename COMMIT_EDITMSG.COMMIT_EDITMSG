@@ -1,0 +1,165 @@
+commit pertama kalkulator
+
+# --------------
+# Please enter the commit message for your changes. Everything below
+# this paragraph is ignored, and an empty message aborts the commit.
+# Just close the window to accept your message.
+diff --git a/__pycache__/konverter.cpython-313.pyc b/__pycache__/konverter.cpython-313.pyc
+new file mode 100644
+index 0000000..303d5e2
+Binary files /dev/null and b/__pycache__/konverter.cpython-313.pyc differ
+diff --git a/__pycache__/konverter.cpython-314.pyc b/__pycache__/konverter.cpython-314.pyc
+new file mode 100644
+index 0000000..69d1d0a
+Binary files /dev/null and b/__pycache__/konverter.cpython-314.pyc differ
+diff --git a/__pycache__/tes2.cpython-313.pyc b/__pycache__/tes2.cpython-313.pyc
+new file mode 100644
+index 0000000..9ad3830
+Binary files /dev/null and b/__pycache__/tes2.cpython-313.pyc differ
+diff --git a/data_mata_uang.json b/data_mata_uang.json
+new file mode 100644
+index 0000000..9e26dfe
+--- /dev/null
++++ b/data_mata_uang.json
+@@ -0,0 +1 @@
++{}
+\ No newline at end of file
+diff --git a/kalkulator_super.py b/kalkulator_super.py
+new file mode 100644
+index 0000000..703a58a
+--- /dev/null
++++ b/kalkulator_super.py
+@@ -0,0 +1,133 @@
++"""
++KALKULATOR SUPER CLI
++Deskripsi: Aplikasi kalkulator berbasis Command Line Interface (CLI) dengan fitur
++           operasi matematika lengkap, cek bilangan ganjil/genap, manajemen riwayat, 
++           dan sistem pelacakan statistik penggunaan.
++"""
++
++
++import konverter
++
++print("=" * 30)
++print("==========KALKULATOR==========")
++print("=" * 30)
++
++# Variabel Global (State Management)
++FILE_DATA = "data_mata_uang.json"
++riwayat = []
++jumlah_pemakaian = 0
++jumlah_cek = 0
++
++while True:
++    # Menampilkan Menu Utama
++    print("\n=====MENU=====")
++    print("1. Kalkulator")
++    print("2. Cek ganjil/genap")
++    print("3. Riwayat")
++    print("4. Hapus riwayat")
++    print("5. Statistik penggunaan")
++    print("6. Konverter")
++    print("7. Keluar")
++    
++    pilihan = input("Pilih (1/2/3/4/5/6/7): ")
++
++    if pilihan == "1":
++        # Fitur 1: Operasi Kalkulator
++        try:
++            angka1 = float(input("Masukkan angka pertama: "))
++            angka2 = float(input("Masukkan angka kedua: "))
++            kalkulasi = input("Masukkan operator: [+] [-] [*] [/] [**] [%] : ").strip()
++        except ValueError:
++            print("\nMasukkan angka bukan huruf!!!\n")
++            continue
++
++        # Logika Operator Matematika
++        if kalkulasi == "+":
++            hasil = angka1 + angka2
++        elif kalkulasi == "-":
++            hasil = angka1 - angka2
++        elif kalkulasi == "*":
++            hasil = angka1 * angka2
++        elif kalkulasi == "**":
++            hasil = angka1 ** angka2
++        elif kalkulasi == "%":
++            if angka2 == 0:
++                print("\nTidak bisa dibagi 0")
++                continue
++            hasil = angka1 % angka2
++        elif kalkulasi == "/":
++            if angka2 == 0:
++                print("\nTidak bisa dibagi 0")
++                continue
++            hasil = angka1 / angka2
++        else:
++            print("\nOperator tidak dikenali, silakan masukkan ulang!!!")
++            continue
++
++        print(f"||\n||\n==>>> Hasil: {hasil:.2f}")
++        riwayat.append(f"{angka1} {kalkulasi} {angka2} = {hasil:.2f}\n")
++        jumlah_pemakaian += 1
++
++    elif pilihan == "2":
++        # Fitur 2: Cek Ganjil & Genap
++        try:
++            angka = int(input("Masukkan angka : "))
++            if angka % 2 == 0:
++                status = "Genap"
++            else:
++                status = "Ganjil"
++            print(f"||\n||\n==>>> Angka {angka} ini adalah {status}")
++            riwayat.append(f"CEK {angka} --> {status}\n")
++            jumlah_cek += 1
++        except ValueError:
++            print("Masukkan angka bukan huruf, berlaku hanya bilangan bulat")
++
++    elif pilihan == "3":
++        # Fitur 3: Menampilkan Riwayat
++        if not riwayat:
++            print("||\n||\n==>>> Belum ada aktivitas\n")
++        else:
++            for i, item in enumerate(riwayat, start=1):
++                # \n dihapus satu karena variabel 'item' sudah membawa \n saat di-append
++                print(f"{i}. {item}") 
++
++    elif pilihan == "4":
++        # Fitur 4: Menghapus Riwayat dengan Konfirmasi
++        if not riwayat:
++            print("||\n||\n==>>> Belum ada riwayat\n")
++            continue
++        else:
++            for i, item in enumerate(riwayat, start=1):
++                print(f"{i}. {item}")
++                
++        while True:
++            hapus = input("Apakah anda ingin menghapus riwayat? (y/n): ").lower()
++            if hapus == "y":
++                riwayat.clear()
++                print("||\n||\n==>>> Riwayat telah dihapus\n")
++                break
++            elif hapus == "n":
++                print("||\n||\n==>>> Program dibatalkan\n")
++                break
++            else:
++                print("Pilihan anda salah masukkan 'y' atau 'n'")
++
++    elif pilihan == "5":
++        # Fitur 5: Statistik Pemakaian
++        print("\n===Statistik Pemakaian===")
++        print(f"Pemakaian kalkulator = {jumlah_pemakaian}")
++        print(f"Jumlah cek ganjil/genap = {jumlah_cek}")
++        total = jumlah_pemakaian + jumlah_cek
++        print(f"Total pemakaian = {total}")
++    
++    elif pilihan == "6":
++        konverter.main()
++
++    elif pilihan == "7":
++        # Fitur 6: Keluar Program
++        print("Terima kasih telah menggunakan kalkulator")
++        break
++
++    else:
++        print("Pilihan menu anda tidak ada di daftar mohon inputan yang valid!!!")
+\ No newline at end of file
